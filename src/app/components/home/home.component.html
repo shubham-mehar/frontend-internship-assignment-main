@@ -1,0 +1,92 @@
+<div class="header">
+  <div class="tw-text-24-px tw-font-600">Open Books Library</div>
+  <div class="tw-inline-block">
+    <div class="search-button">
+      <mat-icon class="tw-mt-16-px" aria-label="Search Icon">search</mat-icon>
+      <input [formControl]="bookSearch" [(ngModel)]="searchQuery"  (click)="searchBooks()" name="searchKey" type="text" placeholder="Search Books"
+        class="tw-border-0 tw-bg-inherit" />
+    </div>
+      <button class="tw-close-icon" color="primary" aria-label="Clear search" (click)="clearSearch()">
+        <mat-icon>
+          close
+        </mat-icon>
+      </button>
+  </div>
+</div>
+  
+
+<div class="tw-grid tw-grid-cols-4 tw-gap-6">
+  <!-- Element 1 -->
+  <div class="tw-flex tw-flex-row tw-m-24-px tw-col-span-1">
+    <section class="trending-subjects">
+      <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
+      <ul class="tw-list-none tw-pl-0">
+        <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects"
+          routerLink="/trending-subject/{{ subject.name }}">
+          {{ subject.name }}
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Element 2 -->
+  <div class="tw-flex tw-flex-col tw-col-span-2 tw-w-full">
+    <section class="search-results tw-inline-block tw-m-6">
+ 
+      <div *ngIf="loading" class="loader-overlay">
+        <h1>Loading...</h1>
+      </div>
+      <ng-container *ngIf="searchResults.length > 0">
+        <table class="table-view tw-inline-block">
+          <thead>
+            <tr class="table-row">
+              <th class="header tw-inline-block">Title and Sub Title</th>
+              <th class="header tw-inline-block">Author</th>
+              <th class="header tw-inline-block">First Publish Year</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <tr class="row-data" *ngFor="let book of searchResults">
+              <td class="tw-inline-block">
+                <a class="tw-no-underline" href="" target="_blank">{{ book.title }}</a>
+                <div>{{ book.subtitle }}</div>
+              </td>
+              <td class="tw-inline-block">
+                {{ book.author_name?.length > 0 ? book.author_name[0] : 'Unknown' }}
+              </td>
+              <td class="tw-inline-block">{{ book.first_publish_year }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="searchResults.length === 0 && searchQuery && !loading">
+        <div>No Results Found</div>
+      </ng-container>
+    </section>
+
+    <!-- <div class="pagination tw-text-center tw-mb-2">
+      <button class="tw-inline-block tw-mr-2" mat-icon-button [disabled]="currentPage === 1" (click)="previousPage()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <div class="page-numbers tw-inline-block">
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      </div>
+      <button class="tw-inline-block tw-ml-2" mat-icon-button [disabled]="currentPage === totalPages" (click)="nextPage()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div> -->
+    <div *ngIf="searchResults.length > 0" class="pagination tw-text-center tw-mb-2">
+      <button class="tw-inline-block tw-mr-2" mat-icon-button [disabled]="currentPage === 1" (click)="previousPage()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+      <div class="page-numbers tw-inline-block">
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      </div>
+      <button class="tw-inline-block tw-ml-2" mat-icon-button [disabled]="currentPage === totalPages" (click)="nextPage()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+    
+  </div>
+</div>
